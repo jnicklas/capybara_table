@@ -45,6 +45,56 @@ describe CapybaraTable, type: :feature do
 
       expect(table_with_colspan).to have_table_row("First Name" => "Harry", "Age" => "56")
     end
+
+    it "prints a nice failure message" do
+      node = simple_table.find("table")
+      matcher = have_table_row("First Name" => "Moo", count: 2)
+      matcher.matches?(node)
+
+      expect(matcher.failure_message).to eq <<~MESSAGE.chomp
+        expected to find table_row {"First Name"=>"Moo"} 2 times but there were no matches in the following table:
+
+        +------------+-----------+-----+
+        | First Name | Last Name | Age |
+        +------------+-----------+-----+
+        | Jonas      | Nicklas   | 31  |
+        +------------+-----------+-----+
+        | John       | Smith     | 22  |
+        +------------+-----------+-----+
+      MESSAGE
+    end
+  end
+
+  describe "Renderer" do
+    it "renders a simple table" do
+      table = simple_table.find("table")
+      result = CapybaraTable::Renderer.render(table)
+      expect(result).to eq <<~TABLE.chomp
+        +------------+-----------+-----+
+        | First Name | Last Name | Age |
+        +------------+-----------+-----+
+        | Jonas      | Nicklas   | 31  |
+        +------------+-----------+-----+
+        | John       | Smith     | 22  |
+        +------------+-----------+-----+
+      TABLE
+    end
+
+    it "renders a table with colspans" do
+      table = table_with_colspan.find("table")
+      result = CapybaraTable::Renderer.render(table)
+      expect(result).to eq <<~TABLE.chomp
+        +------------+-------+-----+-----+
+        | First Name | Last Name   | Age |
+        +------------+-------+-----+-----+
+        | Jonas                    | 31  |
+        +------------+-------+-----+-----+
+        | John       | Smith | Esq | 22  |
+        +------------+-------+-----+-----+
+        | Harry              | MD  | 56  |
+        +------------+-------+-----+-----+
+      TABLE
+    end
   end
 
   def fixture(name)

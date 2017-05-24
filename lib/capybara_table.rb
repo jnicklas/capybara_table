@@ -1,5 +1,6 @@
 require "capybara_table/version"
 require "capybara"
+require "terminal-table"
 
 module CapybaraTable
   module Expressions
@@ -25,6 +26,22 @@ module CapybaraTable
       exists = node.method(:boolean).method(:number)
 
       without_colspan.plus(with_colspan).plus(exists)
+    end
+  end
+
+  module Renderer
+    extend self
+
+    def render(node)
+      node.synchronize do
+        rows = node.all("tr").map do |row|
+          row.all("th, td").map do |cell|
+            {value: cell.text, colspan: (cell[:colspan] || 1).to_i}
+          end
+        end
+
+        Terminal::Table.new(headings: rows.first, rows: rows.drop(1), style: {all_separators: true}).to_s
+      end
     end
   end
 end
