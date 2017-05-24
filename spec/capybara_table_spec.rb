@@ -9,9 +9,9 @@ describe CapybaraTable, type: :feature do
 
   describe :table do
     it "finds a table by caption" do
-      expect(table_with_colspan).to have_selector(:table, "People")
-      expect(table_with_colspan).not_to have_selector(:table, "People", exact: true)
-      expect(table_with_colspan).not_to have_selector(:table, "WRONG")
+      expect(table_with_colspan).to have_table("People")
+      expect(table_with_colspan).not_to have_table("People", exact: true)
+      expect(table_with_colspan).not_to have_table("WRONG")
     end
   end
 

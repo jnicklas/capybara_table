@@ -2,6 +2,10 @@ require "capybara_table"
 
 module CapybaraTable
   module RSpecMatchers
+    def have_table(caption, **options)
+      have_selector(:table, caption, **options)
+    end
+
     def have_table_row(fields_and_options)
       fields, options = fields_and_options.partition { |k, v| k.is_a?(String) }
 
