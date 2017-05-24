@@ -29,6 +29,12 @@ module CapybaraTable
   end
 end
 
+Capybara.add_selector :table do
+  xpath do |caption|
+    XPath.descendant(:table)[XPath.descendant(:caption).string.n.is(caption)]
+  end
+end
+
 Capybara.add_selector :table_row do
   xpath do |fields|
     fields.reduce(XPath.descendant(:tr)) do |xpath, (header, value)|

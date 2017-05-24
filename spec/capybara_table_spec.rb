@@ -4,10 +4,18 @@ require "capybara_table"
 require "capybara_table/rspec"
 
 describe CapybaraTable, type: :feature do
-  describe :table_row do
-    let(:simple_table) { Capybara.string(fixture("simple_table.html")) }
-    let(:table_with_colspan) { Capybara.string(fixture("table_with_colspan.html")) }
+  let(:simple_table) { Capybara.string(fixture("simple_table.html")) }
+  let(:table_with_colspan) { Capybara.string(fixture("table_with_colspan.html")) }
 
+  describe :table do
+    it "finds a table by caption" do
+      expect(table_with_colspan).to have_selector(:table, "People")
+      expect(table_with_colspan).not_to have_selector(:table, "People", exact: true)
+      expect(table_with_colspan).not_to have_selector(:table, "WRONG")
+    end
+  end
+
+  describe :table_row do
     it "matches a single field" do
       expect(simple_table).to have_table_row("First Name" => "Jonas")
       expect(simple_table).not_to have_table_row("First Name" => "WRONG")
