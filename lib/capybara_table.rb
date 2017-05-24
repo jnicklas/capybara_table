@@ -19,8 +19,9 @@ module CapybaraTable
     end
 
     def cell_position(node)
-      without_colspan = node.axis(:"preceding-sibling")[XPath.attr(:colspan).inverse].count
-      with_colspan = node.axis(:"preceding-sibling").attr(:colspan).method(:sum)
+      siblings = node.axis(:"preceding-sibling", :td, :th)
+      without_colspan = siblings[XPath.attr(:colspan).inverse].count
+      with_colspan = siblings.attr(:colspan).method(:sum)
       exists = node.method(:boolean).method(:number)
 
       without_colspan.plus(with_colspan).plus(exists)
