@@ -1,6 +1,7 @@
 require "capybara_table/version"
 require "capybara"
 require "terminal-table"
+require "xpath"
 
 module CapybaraTable
   module XPath
