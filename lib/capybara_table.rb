@@ -3,9 +3,15 @@ require "capybara"
 require "terminal-table"
 
 module CapybaraTable
-  module Expressions
-    include XPath
+  module XPath
+    include ::XPath
     extend self
+
+    def table_row(fields)
+      fields.reduce(descendant(:tr)) do |xpath, (header, value)|
+        xpath[table_cell(header, value)]
+      end
+    end
 
     def table_cell(header, value)
       descendant(:td, :th)[string.n.is(value).and(header_position(header).equals(self_position))]
@@ -56,8 +62,6 @@ end
 
 Capybara.add_selector :table_row do
   xpath do |fields|
-    fields.reduce(XPath.descendant(:tr)) do |xpath, (header, value)|
-      xpath[CapybaraTable::Expressions.table_cell(header, value)]
-    end
+    CapybaraTable::XPath.table_row(fields)
   end
 end
