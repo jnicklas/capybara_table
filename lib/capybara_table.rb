@@ -7,6 +7,10 @@ module CapybaraTable
     include ::XPath
     extend self
 
+    def table(caption)
+      descendant(:table)[descendant(:caption).string.n.is(caption)]
+    end
+
     def table_row(fields)
       fields.reduce(descendant(:tr)) do |xpath, (header, value)|
         xpath[table_cell(header, value)]
@@ -56,7 +60,7 @@ end
 
 Capybara.add_selector :table do
   xpath do |caption|
-    XPath.descendant(:table)[XPath.descendant(:caption).string.n.is(caption)]
+    CapybaraTable::XPath.table(caption)
   end
 end
 
