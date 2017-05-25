@@ -6,6 +6,7 @@ require "capybara_table/rspec"
 describe CapybaraTable, type: :feature do
   let(:simple_table) { Capybara.string(fixture("simple_table.html")) }
   let(:table_with_colspan) { Capybara.string(fixture("table_with_colspan.html")) }
+  let(:nested_table) { Capybara.string(fixture("nested_table.html")) }
 
   describe :table do
     it "finds a table by caption" do
@@ -32,6 +33,12 @@ describe CapybaraTable, type: :feature do
 
       expect(simple_table).not_to have_table_row("First Name" => "Jonas", "Last Name" => "Smith")
       expect(simple_table).not_to have_table_row("First Name" => "Jonas", "Last Name" => "WRONG")
+    end
+
+    it "supports nested tables" do
+      expect(nested_table).to have_table_row("First Name" => "Jonas", "Age" => "31")
+      expect(nested_table).not_to have_table_row("Thing" => "Jonas", exact: true)
+      expect(nested_table).not_to have_table_row("Quox" => "Nicklas")
     end
 
     it "supports colspans" do
