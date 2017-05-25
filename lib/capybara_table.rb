@@ -4,24 +4,25 @@ require "terminal-table"
 
 module CapybaraTable
   module Expressions
+    include XPath
     extend self
 
     def table_cell(header, value)
-      XPath.descendant(:td, :th)[XPath.string.n.is(value).and(header_position(header).equals(self_position))]
+      descendant(:td, :th)[string.n.is(value).and(header_position(header).equals(self_position))]
     end
 
     def self_position
-      cell_position(XPath.axis(:self))
+      cell_position(axis(:self))
     end
 
     def header_position(header)
-      header_node = XPath.axis(:ancestor, :table)[1].descendant(:tr)[1].descendant(:th)[XPath.string.n.is(header)]
+      header_node = axis(:ancestor, :table)[1].descendant(:tr)[1].descendant(:th)[string.n.is(header)]
       cell_position(header_node)
     end
 
     def cell_position(node)
       siblings = node.axis(:"preceding-sibling", :td, :th)
-      without_colspan = siblings[XPath.attr(:colspan).inverse].count
+      without_colspan = siblings[attr(:colspan).inverse].count
       with_colspan = siblings.attr(:colspan).method(:sum)
       exists = node.method(:boolean).method(:number)
 
