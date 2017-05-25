@@ -1,8 +1,6 @@
 # CapybaraTable
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/capybara_table`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Some neat Capybara selectors and matchers for working with HTML tables.
 
 ## Installation
 
@@ -20,20 +18,62 @@ Or install it yourself as:
 
     $ gem install capybara_table
 
+If you're using RSpec, require the matchers:
+
+```
+require "capybara_table/rspec"
+```
+
+Otherwise
+
 ## Usage
 
-TODO: Write usage instructions here
 
-## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+If you have a table like this:
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+``` html
+<table>
+  <caption>People</caption>
+  <tr>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Age</th>
+  </tr>
+  <tr>
+    <td>Jonas</td>
+    <td>Nicklas</td>
+    <td>31</td>
+  </tr>
+  <tr>
+    <td colspan="2">John</td>
+    <td>22</td>
+  </tr>
+</table>
+```
 
-## Contributing
+Then you can do this
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/capybara_table. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+``` ruby
+# find a table by caption
+find(:table, "People") # by caption
 
+# find a table row by its headers, even works with colspans!
+# (note the extra hash at the end)
+find(:table_row, {"First Name" => "Jonas", "Last Name" => "Nicklas"}, {})
+
+# Assert on a table row with RSpec
+expect(find(:table "People")).to have_table_row("First Name" => "Jonas", "Last Name" => "Nicklas")
+
+# Assert on a table row with MiniTest
+within :table, "People" do
+  assert_selector(:table_row, {"First Name" => "Jonas", "Last Name" => "Nicklas"}, {})
+end
+```
+
+If the node you pass to the `have_table_row` matcher is a table (or a
+descendant thereof, like a tbody), then you will get a nice ASCII table
+rendering if the row can't be found.
 
 ## License
 
