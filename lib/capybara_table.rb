@@ -12,19 +12,20 @@ module CapybaraTable
     end
 
     def self_position
-      cell_position(axis(:self))
+      cell_position(self_axis)
     end
 
     def header_position(header)
-      header_node = axis(:ancestor, :table)[1].descendant(:tr)[1].descendant(:th)[string.n.is(header)]
+      header_node = ancestor(:table)[1].descendant(:tr)[1].descendant(:th)[string.n.is(header)]
       cell_position(header_node)
     end
 
     def cell_position(node)
-      siblings = node.axis(:"preceding-sibling", :td, :th)
+      siblings = node.preceding_sibling(:td, :th)
+
       without_colspan = siblings[attr(:colspan).inverse].count
-      with_colspan = siblings.attr(:colspan).method(:sum)
-      exists = node.method(:boolean).method(:number)
+      with_colspan = siblings.attr(:colspan).sum
+      exists = node.boolean.number
 
       without_colspan.plus(with_colspan).plus(exists)
     end
