@@ -71,10 +71,6 @@ within :table, "People" do
 end
 ```
 
-If the node you pass to the `have_table_row` matcher is a table (or a
-descendant thereof, like a tbody), then you will get a nice ASCII table
-rendering if the row can't be found.
-
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).

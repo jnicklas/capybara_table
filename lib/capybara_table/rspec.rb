@@ -21,14 +21,13 @@ module CapybaraTable
       end
 
       failure_message do |node|
+        node = node.document if node.is_a?(Capybara::Session)
         node.synchronize do
-          table = node.first(:xpath, XPath.axis(:"ancestor-or-self", :table))
-
-          if table
-            selector.failure_message + " in the following table:\n\n" + CapybaraTable::Renderer.render(table)
-          else
-            selector.failure_message
+          tables = node.all(:xpath, XPath.descendant_or_self(:table)).map do |table|
+            CapybaraTable::Renderer.render(table)
           end
+
+          selector.failure_message + " in the following tables:\n\n" + tables.join("\n\n")
         end
       end
     end
