@@ -27,7 +27,7 @@ module CapybaraTable
     end
 
     def header_position(header)
-      header_node = ancestor(:table)[1].descendant(:tr)[1].descendant(:th)[string.n.is(header)]
+      header_node = ancestor(:table)[1].descendant(:thead, :tr)[1].descendant(:th)[string.n.is(header)]
       cell_position(header_node)
     end
 
@@ -47,7 +47,7 @@ module CapybaraTable
 
     def render(node)
       node.synchronize do
-        rows = node.all("tr").map do |row|
+        rows = node.all("thead, tr").map do |row|
           row.all("th, td").map do |cell|
             {value: cell.text, colspan: (cell[:colspan] || 1).to_i}
           end
