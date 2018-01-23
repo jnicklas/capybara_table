@@ -36,5 +36,6 @@ end
 
 RSpec.configure do |config|
   config.include CapybaraTable::RSpecMatchers, type: :feature
+  config.include CapybaraTable::RSpecMatchers, type: :system
   config.include CapybaraTable::RSpecMatchers, type: :view
 end
