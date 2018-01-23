@@ -63,7 +63,7 @@ find(:table, "People") # by caption
 find(:table_row, {"First Name" => "Jonas", "Last Name" => "Nicklas"}, {})
 
 # Assert on a table row with RSpec
-expect(find(:table "People")).to have_table_row("First Name" => "Jonas", "Last Name" => "Nicklas")
+expect(find(:table, "People")).to have_table_row("First Name" => "Jonas", "Last Name" => "Nicklas")
 
 # Assert on a table row with MiniTest
 within :table, "People" do
