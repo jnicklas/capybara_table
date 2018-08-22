@@ -59,7 +59,7 @@ describe CapybaraTable, type: :feature do
       matcher.matches?(node)
 
       expect(matcher.failure_message).to eq <<~MESSAGE.chomp
-        expected to find table_row {"First Name"=>"Moo"} 2 times but there were no matches in the following tables:
+        expected to find visible table_row {"First Name"=>"Moo"} within #<Capybara::Node::Simple tag="table" path="/html/body/table"> 2 times but there were no matches in the following tables:
 
         +------------+-----------+-----+
         | First Name | Last Name | Age |
