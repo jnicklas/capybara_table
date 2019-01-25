@@ -10,7 +10,13 @@ module CapybaraTable
 
     matcher :have_table_row do |fields_and_options|
       fields, options = fields_and_options.partition { |k, v| k.is_a?(String) }.map(&:to_h)
-      selector = Capybara::RSpecMatchers::HaveSelector.new(:table_row, fields, options)
+
+      klass = begin
+        Capybara::RSpecMatchers::Matchers::HaveSelector
+      rescue NameError
+        Capybara::RSpecMatchers::HaveSelector
+      end
+      selector = klass.new(:table_row, fields, options)
 
       match do |node|
         selector.matches?(node)
