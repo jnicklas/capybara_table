@@ -16,7 +16,7 @@ module CapybaraTable
       rescue NameError
         Capybara::RSpecMatchers::HaveSelector
       end
-      selector = klass.new(:table_row, fields, options)
+      selector = klass.new(:table_row, fields, **options)
 
       match do |node|
         selector.matches?(node)
