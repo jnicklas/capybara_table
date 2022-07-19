@@ -91,15 +91,15 @@ describe CapybaraTable, type: :feature do
       table = table_with_colspan.find("table")
       result = CapybaraTable::Renderer.render(table)
       expect(result).to eq <<~TABLE.chomp
-        +------------+-------+-----+-----+
+        +------------+-------------+-----+
         | First Name | Last Name   | Age |
-        +------------+-------+-----+-----+
+        +------------+-------------+-----+
         | Jonas                    | 31  |
         +------------+-------+-----+-----+
         | John       | Smith | Esq | 22  |
         +------------+-------+-----+-----+
         | Harry              | MD  | 56  |
-        +------------+-------+-----+-----+
+        +--------------------+-----+-----+
       TABLE
     end
   end
